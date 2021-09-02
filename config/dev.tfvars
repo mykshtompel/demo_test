@@ -4,6 +4,7 @@ aws_region  = "us-east-2"
 
 #Variables for module "s3_terraform_state"
 bucket_name = "bucket-web-dev-nginx-us-east-2"
+table_name  = "table-web-dev-nginx-us-east-2"
 
 #General variables for other modules
 env            = "dev"
@@ -21,6 +22,6 @@ web_server_fargate_memory = 512
 web_server_count          = 1
 
 #Variables for module "codebuild"
-repo_url          = "https://github.com/mykshtompel/demo3"
-branch_pattern    = "^refs/heads/dev$"
+repo_url          = "https://github.com/mykshtompel/demo_test"
+branch_pattern    = "^refs/heads/develop$"
 git_trigger_event = "PUSH"
