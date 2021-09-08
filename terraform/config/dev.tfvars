@@ -19,7 +19,7 @@ cidr_block                = "10.10.0.0/16"
 app_port                  = 80
 web_server_fargate_cpu    = 256
 web_server_fargate_memory = 512
-web_server_count          = 1
+web_server_count          = 2
 
 #Variables for module "codebuild"
 repo_url          = "https://github.com/mykshtompel/demo_test"
