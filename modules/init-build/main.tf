@@ -1,4 +1,4 @@
-#Initial build image
+# Initial build image
 resource "null_resource" "build" {
   provisioner "local-exec" {
     command     = "make build"

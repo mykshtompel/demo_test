@@ -1,3 +1,4 @@
+# Required versions of Terraform, AWS provider and Template provider
 terraform {
   required_version = "= 1.0.2"
 

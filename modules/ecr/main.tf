@@ -1,4 +1,4 @@
-#ECR repository
+# ECR repository
 resource "aws_ecr_repository" "main" {
   name                 = "${var.app}-${var.env}-${var.name_container}"
   image_tag_mutability = "MUTABLE"
@@ -8,15 +8,15 @@ resource "aws_ecr_repository" "main" {
   }
 }
 
-#ECR repository policy
+# ECR repository policy
 resource "aws_ecr_repository_policy" "main" {
   repository = aws_ecr_repository.main.name
   policy     = <<EOF
 {
-    "Version": "2008-10-17",
+    "Version": "2012-10-17",
     "Statement": [
       {
-        "Sid": "adds full ecr access to the demo repository",
+        "Sid": "Access to the ECR repository",
         "Effect": "Allow",
         "Principal": "*",
         "Action": [

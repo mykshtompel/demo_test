@@ -1,4 +1,4 @@
-#Application Load Balancer
+# Application Load Balancer (ALB)
 resource "aws_alb" "alb" {
   name               = "${var.app}-${var.env}-alb"
   load_balancer_type = "application"
@@ -10,7 +10,7 @@ resource "aws_alb" "alb" {
   }
 }
 
-#ALB Listener
+# ALB Listener
 resource "aws_alb_listener" "http" {
   load_balancer_arn = aws_alb.alb.id
   port              = var.app_port
@@ -20,16 +20,16 @@ resource "aws_alb_listener" "http" {
     target_group_arn = aws_alb_target_group.web_server.id
     type             = "forward"
   }
-}
-
-#Security Group for ALB
-resource "aws_security_group" "alb" {
-  name   = "${var.app}-${var.env}-sg-alb"
-  vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "${var.app}_${var.env}_sg_alb"
+    Name = "${var.app}_${var.env}_alb_listener"
   }
+}
+
+# Security Group for ALB
+resource "aws_security_group" "alb" {
+  name   = "${var.app}-${var.env}-alb-sg"
+  vpc_id = aws_vpc.vpc.id
 
   ingress {
     protocol    = "tcp"
@@ -44,18 +44,22 @@ resource "aws_security_group" "alb" {
     to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name = "${var.app}_${var.env}_alb_sg"
+  }
 }
 
-#Target Group and Targets for ALB
+# Target group and targets for ALB
 resource "aws_alb_target_group" "web_server" {
-  name        = "${var.app}-${var.env}-tg"
+  name        = "${var.app}-${var.env}-alb-tg"
   port        = var.app_target_port
   protocol    = "HTTP"
   vpc_id      = aws_vpc.vpc.id
   target_type = "ip"
 
   tags = {
-    Name = "${var.app}_${var.env}_tg"
+    Name = "${var.app}_${var.env}_alb_tg"
   }
 
   health_check {

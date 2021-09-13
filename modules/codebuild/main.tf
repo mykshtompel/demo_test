@@ -1,4 +1,5 @@
-#Import source credentials for github
+# Import source credentials for github
+/*
 resource "null_resource" "import_source_credentials" {
 
   triggers = {
@@ -14,8 +15,15 @@ resource "null_resource" "import_source_credentials" {
 EOF
   }
 }
+*/
+resource "aws_codebuild_source_credential" "main" {
+  auth_type   = "PERSONAL_ACCESS_TOKEN"
+  server_type = "GITHUB"
+  token       = var.github_oauth_token
+}
 
-#CodeBuild Project
+
+# CodeBuild Project
 resource "aws_codebuild_project" "project" {
   name          = local.codebuild_project_name
   description   = local.description
@@ -50,14 +58,18 @@ resource "aws_codebuild_project" "project" {
   }
 
   source {
-    buildspec           = var.build_spec_file
-    type                = "GITHUB"
+    buildspec = var.build_spec_file
+    type      = "GITHUB"
+    auth {
+      type     = "OAUTH"
+      resource = aws_codebuild_source_credential.main.arn
+    }
     location            = var.repo_url
     git_clone_depth     = 1
     report_build_status = "true"
   }
 
-  depends_on = [null_resource.import_source_credentials]
+  #depends_on = [null_resource.import_source_credentials]
 
   vpc_config {
     vpc_id             = var.vpc_id
@@ -67,7 +79,7 @@ resource "aws_codebuild_project" "project" {
 
 }
 
-#Webhook for CodeBuild project
+# Webhook for CodeBuild project
 resource "aws_codebuild_webhook" "develop_webhook" {
   project_name = aws_codebuild_project.project.name
 
@@ -84,9 +96,9 @@ resource "aws_codebuild_webhook" "develop_webhook" {
   }
 }
 
-#Security group for CodeBuild project
+# Security group for CodeBuild project
 resource "aws_security_group" "codebuild_sg" {
-  name        = "allow_vpc_connectivity-${var.app}-${var.env}-vpc"
+  name        = "${var.app}-${var.env}-${var.name_container}-codebuild-sg"
   description = "Allow Codebuild connectivity to all the resources within our VPC"
   vpc_id      = var.vpc_id
 
@@ -102,5 +114,9 @@ resource "aws_security_group" "codebuild_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.app}_${var.env}_${var.name_container}_codebuild_sg"
   }
 }

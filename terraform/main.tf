@@ -1,9 +1,11 @@
+# Module "s3_terraform_state" to store Terraform states
 module "s3_terraform_state" {
   source      = "../modules/s3"
   bucket_name = var.bucket_name
   table_name  = var.table_name
 }
 
+# Module "elastic_container_registry" to store Docker images
 module "elastic_container_registry" {
   source         = "../modules/ecr"
   app            = var.app
@@ -11,6 +13,7 @@ module "elastic_container_registry" {
   name_container = var.name_container
 }
 
+# Module "initial_build" for create initial Docker image
 module "initial_build" {
   source         = "../modules/init-build"
   working_dir    = "${path.root}/../app"
@@ -20,6 +23,7 @@ module "initial_build" {
   name_container = var.name_container
 }
 
+# Module "ecs_cluster" to create VPC and ECS cluster
 module "ecs_cluster" {
   source                    = "../modules/network"
   cidr_block                = var.cidr_block
@@ -36,6 +40,7 @@ module "ecs_cluster" {
   name_container            = var.name_container
 }
 
+# Module "codebuild" to create Codebuild project
 module "codebuild" {
   source             = "../modules/codebuild"
   vpc_id             = module.ecs_cluster.vpc_id

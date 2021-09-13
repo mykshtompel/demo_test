@@ -1,9 +1,13 @@
-#ECS Cluster
+# ECS Cluster
 resource "aws_ecs_cluster" "web_server" {
   name = "${var.app}-${var.env}-${var.name_container}-cluster"
+
+  tags = {
+    Name = "${var.app}-${var.env}-${var.name_container}-cluster"
+  }
 }
 
-#ECS container definition
+# ECS container definition
 data "template_file" "web_server" {
   template = file(var.taskdef_template)
 
@@ -20,7 +24,7 @@ data "template_file" "web_server" {
   }
 }
 
-#ECS task definition
+# ECS task definition
 resource "aws_ecs_task_definition" "web_server" {
   family                   = "${var.app}-${var.env}-${var.name_container}-task"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
@@ -32,7 +36,7 @@ resource "aws_ecs_task_definition" "web_server" {
   container_definitions    = data.template_file.web_server.rendered
 }
 
-#ECS service
+# ECS service
 resource "aws_ecs_service" "web_server" {
   name            = "${var.app}-${var.env}-${var.name_container}-service"
   cluster         = aws_ecs_cluster.web_server.id
@@ -41,9 +45,9 @@ resource "aws_ecs_service" "web_server" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups  = [aws_security_group.web_server_task.id]
-    subnets          = aws_subnet.private_subnet.*.id
-    assign_public_ip = true
+    security_groups = [aws_security_group.web_server_task.id]
+    subnets         = aws_subnet.private_subnet.*.id
+    #assign_public_ip = true
   }
 
   load_balancer {
@@ -55,9 +59,9 @@ resource "aws_ecs_service" "web_server" {
   depends_on = [aws_alb_listener.http, aws_iam_role_policy.ecs_task_execution_role]
 }
 
-#ECS task security group
+# ECS task security group
 resource "aws_security_group" "web_server_task" {
-  name   = "${var.app}-${var.env}-${var.name_container}-sg_web_server_task"
+  name   = "${var.app}-${var.env}-${var.name_container}-web-server-task-sg"
   vpc_id = aws_vpc.vpc.id
 
   ingress {
@@ -72,5 +76,9 @@ resource "aws_security_group" "web_server_task" {
     from_port   = 0
     to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.app}_${var.env}_${var.name_container}_web_server_task_sg"
   }
 }

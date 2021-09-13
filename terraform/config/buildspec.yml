@@ -59,8 +59,9 @@ phases:
             if [ "${NEW_TAG}" != ${TAG} ]; then
               sleep 10
             fi
+            echo "Cluster has been deployed"
           done
         else
           echo "Build failed"
         fi
-      - echo "Cluster has been deployed"
+      - echo "Finish"

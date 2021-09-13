@@ -1,7 +1,6 @@
-#S3 bucket for terraform state
+# S3 bucket for Terraform state
 resource "aws_s3_bucket" "terraform_state" {
   bucket = var.bucket_name
-  #force_destroy = true
 
   lifecycle {
     prevent_destroy = true
@@ -25,7 +24,7 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 }
 
-#dynamodb table for terraform state lock
+# DynamoDB table for Terraform state lock
 resource "aws_dynamodb_table" "terraform_locks" {
   name         = var.table_name
   billing_mode = "PAY_PER_REQUEST"
@@ -34,5 +33,9 @@ resource "aws_dynamodb_table" "terraform_locks" {
   attribute {
     name = "LockID"
     type = "S"
+  }
+
+  tags = {
+    Name = var.table_name
   }
 }
