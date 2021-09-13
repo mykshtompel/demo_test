@@ -39,7 +39,7 @@ resource "aws_iam_role_policy" "ecs_task_execution_role" {
           "logs:CreateLogStream",
           "logs:PutLogEvents",
           "logs:DescribeLogStreams"
-        ],
+        ]
         Resource = "*"
       },
       {
@@ -47,7 +47,7 @@ resource "aws_iam_role_policy" "ecs_task_execution_role" {
         Action = [
           "ec2:Describe",
           "ec2:DescribeInstances"
-        ],
+        ]
         Resource = "*"
       },
       {
@@ -55,7 +55,7 @@ resource "aws_iam_role_policy" "ecs_task_execution_role" {
         Action : [
           "ssm:GetParameters",
           "ssm:GetParametersByPath"
-        ],
+        ]
         Resource = [
           "arn:aws:ssm:*:*:parameter/*"
         ]
@@ -79,7 +79,7 @@ resource "aws_iam_role_policy" "ecs_task_execution_role" {
           "kms:Decrypt"
         ]
         Resource = "*"
-      }
+      },
     ]
   })
 }
@@ -113,7 +113,7 @@ resource "aws_iam_role_policy" "ecs_task_role" {
         Action = [
           "s3:Get*",
           "s3:List*"
-        ],
+        ]
         Resource = "*"
       },
     ]
