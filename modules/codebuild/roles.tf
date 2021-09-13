@@ -39,6 +39,16 @@ resource "aws_iam_role_policy" "role_policy" {
         Resource = "arn:aws:iam::*:role/*"
       },
       {
+        Action   = "iam:CreateServiceLinkedRole"
+        Effect   = "Allow"
+        Resource = "arn:aws:iam::*:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"
+        Condition = {
+          StringLike = {
+            "iam:AWSServiceName" : "rds.amazonaws.com"
+          }
+        }
+      },
+      {
         Effect = "Allow"
         Action = [
           "logs:*"
@@ -50,6 +60,13 @@ resource "aws_iam_role_policy" "role_policy" {
         Action = [
           "elasticloadbalancing:*"
         ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "rds:*"
+        ],
         Resource = "*"
       },
       {
@@ -73,6 +90,20 @@ resource "aws_iam_role_policy" "role_policy" {
           "cloudwatch:*"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:*"
+        ]
+        Resource = "arn:aws:secretsmanager:${local.region}:*:secret:*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameters"
+        ]
+        Resource = "arn:aws:ssm:${local.region}:*:parameter*"
       },
       {
         Effect = "Allow"
