@@ -3,13 +3,13 @@ aws_profile = "default"
 aws_region  = "us-east-2"
 
 # Variables for module "s3_terraform_state"
-bucket_name = "bucket-web-dev-nginx-us-east-2"
-table_name  = "table-web-dev-nginx-us-east-2"
+bucket_name = "bucket-web1-dev-nginx1-us-east-2"
+table_name  = "table-web1-dev-nginx1-us-east-2"
 
 # General variables for other modules
 env            = "dev"
-app            = "web"
-name_container = "nginx"
+app            = "web1"
+name_container = "nginx1"
 
 # Variables for module "initial_build"
 image_tag = "0.0.1"
