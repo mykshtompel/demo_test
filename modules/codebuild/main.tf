@@ -60,16 +60,19 @@ resource "aws_codebuild_project" "project" {
   source {
     buildspec = var.build_spec_file
     type      = "GITHUB"
+    /*
     auth {
       type     = "OAUTH"
       resource = aws_codebuild_source_credential.main.arn
     }
+    */
     location            = var.repo_url
     git_clone_depth     = 1
     report_build_status = "true"
   }
 
   #depends_on = [null_resource.import_source_credentials]
+  depends_on = [aws_codebuild_source_credential.main]
 
   vpc_config {
     vpc_id             = var.vpc_id
