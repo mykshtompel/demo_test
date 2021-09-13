@@ -30,7 +30,7 @@ locals {
   # Number of public subnets
   number_public_subnets = 2
   # Number of private subnets
-  number_private_subnets = 2
+  number_private_subnets = 1
   # A list of the Availability Zone names available to the account
   azs = data.aws_availability_zones.available.names
 }
