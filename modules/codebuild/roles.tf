@@ -66,7 +66,7 @@ resource "aws_iam_role_policy" "role_policy" {
         Effect = "Allow"
         Action = [
           "rds:*"
-        ],
+        ]
         Resource = "*"
       },
       {
