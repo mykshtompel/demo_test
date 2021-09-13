@@ -61,36 +61,6 @@ data "template_file" "ecs_service_policy" {
       "Resource": [
         "*"
       ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ssm:GetParameters",
-        "ssm:GetParametersByPath"
-      ],
-      "Resource": [
-        "arn:aws:ssm:*:*:parameter/*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "secretsmanager:GetSecretValue"
-      ],
-      "Resource": [
-        "arn:aws:secretsmanager:*:*:secret:*"
-      ]
-    },
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Action": [
-         "kms:ListKeys",
-         "kms:ListAliases",
-         "kms:Describe*",
-         "kms:Decrypt"
-      ],
-      "Resource": "*"
     }
   ]
 }
